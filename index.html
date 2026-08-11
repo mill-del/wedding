@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ильшат &amp; Дильназ — Свадебное приглашение</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+
+
+<style>
+  :root{
+    --white:#fff9f2;
+    --cream:#f3e7dc;
+    --blush:#e6c6c1;
+    --blush-soft:#d6aaa8;
+    --rose:#b65d6b;
+    --rose-deep:#743642;
+    --burgundy:#592633;
+    --gold:#ad7d35;
+    --gold-soft:#d7bd86;
+    --ink:#342b2b;
+    --ink-soft:#766765;
+    --line:rgba(122,63,73,0.25);
+    --shadow:0 20px 60px rgba(76,45,45,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--white);
+    color:var(--ink);
+    font-family:'Cormorant Garamond', serif;
+    font-size:19px;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    margin:0;
+  }
+  /* Royal Signage is intentionally used for the couple's names.
+     * If the font is installed locally, it will be used exactly; otherwise
+     * the decorative fallback keeps the invitation readable. */
+  .script{ font-family:'Royal Signage Regular','Royal Signage',serif; }
+    .arabic{ font-family:'Aref Ruqaa', serif; }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .container{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  /* ===== FLORAL DECOR (hand-drawn line florals, gentle sway) ===== */
+  .floral{
+    position:absolute;
+    pointer-events:none;
+    z-index:1;
+  }
+  @keyframes sway{
+    0%,100%{ transform:rotate(-2deg); }
+    50%{ transform:rotate(2deg); }
+  }
+  @keyframes swayR{
+    0%,100%{ transform:rotate(2deg) scaleX(-1); }
+    50%{ transform:rotate(-2deg) scaleX(-1); }
+  }
+  .floral.sway{ animation:sway 7s ease-in-out infinite; transform-origin:top left; }
+  .floral.swayR{ animation:swayR 7s ease-in-out infinite; transform-origin:top right; }
+  @keyframes petalFall{
+    0%{ transform:translateY(-10px) rotate(0deg); opacity:0; }
+    10%{ opacity:0.8; }
+    100%{ transform:translateY(340px) rotate(220deg); opacity:0; }
+  }
+  .petal{
+    position:absolute;
+    width:14px; height:14px;
+    background:var(--rose);
+    border-radius:0 60% 0 60%;
+    opacity:0.7;
+    animation:petalFall 9s linear infinite;
+  }
+
+
+  body.envelope-locked{overflow:hidden}
+
+
+  /* ===== TWO-PAGE EXPERIENCE ===== */
+  .invitation-page{
+    display:none;
+    opacity:0;
+  }
+  .invitation-page.visible{
+    display:block;
+    opacity:1;
+    animation:invitationReveal 1s ease both;
+  }
+  @keyframes invitationReveal{
+    from{opacity:0;transform:translateY(18px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  body.envelope-locked{
+    overflow:hidden;
+    height:100vh;
+  }
+  body.invitation-open{
+    overflow-x:hidden;
+    overflow-y:auto;
+    height:auto;
+  }
+
+  /* ===== LUXURY LACE ENVELOPE ===== */
+  .envelope-screen{
+    position:fixed; inset:0; z-index:1000; width:100vw; height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(circle at 50% 42%, #f9eee7 0%, #e9d2ca 48%, #cda8a0 100%);
+    transition:opacity 1s ease, visibility 1s ease;
+    overflow:hidden;
+  }
+  .envelope-screen::before{
+    content:""; position:absolute; inset:20px;
+    border:1px solid rgba(174,132,67,.55);
+    box-shadow:inset 0 0 0 8px rgba(255,250,244,.18);
+  }
+  .envelope-screen.is-open{opacity:0;visibility:hidden;pointer-events:none;display:none;}
+  .envelope-wrap{width:min(520px,90vw);text-align:center;margin:auto;}
+  .envelope-lace{
+    position:relative;padding:38px;
+    background:rgba(255,250,244,.34);
+    border:1px solid rgba(174,132,67,.55);
+    box-shadow:0 30px 80px rgba(70,40,42,.22);
+  }
+  .envelope-lace::before,.envelope-lace::after{
+    content:"";position:absolute;left:18px;right:18px;height:14px;
+    background:
+      radial-gradient(circle at 7px 7px,transparent 0 4px,#b18a4a 4.6px 5.7px,transparent 6.2px) 0 0/28px 14px repeat-x;
+    opacity:.72;
+  }
+  .envelope-lace::before{top:9px}.envelope-lace::after{bottom:9px}
+  .lace-corner{position:absolute;color:#a97845;font-size:46px;z-index:5;line-height:1;}
+  .lace-tl{top:18px;left:17px;transform:rotate(-35deg)}
+  .lace-tr{top:18px;right:17px;transform:scaleX(-1) rotate(-35deg)}
+  .lace-bl{bottom:18px;left:17px;transform:scaleY(-1) rotate(-35deg)}
+  .lace-br{bottom:18px;right:17px;transform:scale(-1,-1) rotate(-35deg)}
+  .envelope{
+    position:relative;width:100%;aspect-ratio:1.55;
+    background:#f4dfd7;border:1px solid rgba(106,48,61,.3);
+    box-shadow:0 18px 38px rgba(70,40,42,.18);
+  }
+  .envelope::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(32deg,transparent 49.6%,rgba(106,48,61,.17) 50%,transparent 50.5%),
+      linear-gradient(-32deg,transparent 49.6%,rgba(106,48,61,.17) 50%,transparent 50.5%);
+  }
+  .envelope-flap{
+    position:absolute;z-index:4;top:-1px;left:0;width:100%;height:66%;
+    background:linear-gradient(145deg,#e9cdc5,#dfc0b8);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top center;
+    transition:transform 1.1s cubic-bezier(.65,0,.35,1);
+  }
+  .envelope-paper{
+    position:absolute;z-index:2;left:9%;right:9%;top:11%;height:80%;
+    background:#fffaf4;border:1px solid rgba(174,132,67,.38);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(70,40,42,.08);
+    transition:transform 1.05s cubic-bezier(.65,0,.35,1);
+  }
+  .paper-arabic{font-size:21px;color:#6a303d;margin-bottom:10px}
+  .paper-names{font-family:'Royal Signage Regular','Royal Signage',serif;font-size:36px;color:#6a303d}
+  .paper-names span{font-family:'Cormorant Garamond',serif;font-size:20px;color:#b18a4a}
+  .seal{
+    position:absolute;z-index:8;left:50%;top:63%;transform:translate(-50%,-50%);
+    width:72px;height:72px;border-radius:50%;
+    border:2px solid #c9a15d;background:#7b3f49;color:#f8e8d7;
+    box-shadow:0 9px 25px rgba(70,40,42,.3);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .25s ease,box-shadow .25s ease,opacity .3s ease;
+  }
+  .seal::before{content:"";position:absolute;inset:6px;border:1px solid rgba(240,216,171,.8);border-radius:50%}
+  .seal span{font-size:30px;position:relative}
+  .seal:hover{transform:translate(-50%,-50%) scale(1.08);box-shadow:0 12px 32px rgba(70,40,42,.38)}
+  .envelope-wrap.opening .envelope-flap{transform:rotateX(180deg)}
+  .envelope-wrap.opening .envelope-paper{transform:translateY(-35%)}
+  .envelope-wrap.opening .seal{opacity:0;pointer-events:none}
+  .envelope-hint{margin:24px 0 0;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#6a303d}
+  @media(max-width:600px){
+    .envelope-lace{padding:28px 18px}.paper-arabic{font-size:17px}
+    .paper-names{font-size:29px}.seal{width:62px;height:62px}
+    .envelope-hint{font-size:10px;letter-spacing:1.2px}
+  }
+
+
+  /* ===== LARGE ANIMATED FLORALS ===== */
+  .hero-flower{
+    position:absolute;z-index:1;width:240px;height:360px;pointer-events:none;
+    filter:drop-shadow(0 10px 18px rgba(80,45,45,.10));
+    animation:flowerSway 6s ease-in-out infinite;
+    transform-origin:bottom center;
+  }
+  .flower-left{left:-22px;bottom:0}
+  .flower-right{right:-22px;bottom:0;transform:scaleX(-1);animation-delay:1.3s}
+  .hero-flower .stem{
+    position:absolute;left:85px;bottom:-20px;width:3px;height:330px;
+    background:linear-gradient(90deg,#6d6a49,#9b8a57);
+    border-radius:50%;transform:rotate(-17deg);
+  }
+  .hero-flower .petal{
+    position:absolute;width:54px;height:78px;
+    background:linear-gradient(145deg,#f0c4c3,#a95f6b 75%);
+    border-radius:70% 30% 70% 30%;
+    box-shadow:inset 5px 3px 12px rgba(255,255,255,.35),0 5px 15px rgba(91,48,56,.12);
+    animation:petalFloat 4.5s ease-in-out infinite;
+  }
+  .flower-left .p1{left:62px;top:32px;transform:rotate(-22deg)}
+  .flower-left .p2{left:116px;top:70px;transform:rotate(24deg) scale(.85)}
+  .flower-left .p3{left:28px;top:110px;transform:rotate(-55deg) scale(.75)}
+  .flower-left .p4{left:112px;top:145px;transform:rotate(45deg) scale(.7)}
+  .flower-left .p5{left:48px;top:180px;transform:rotate(-35deg) scale(.6)}
+  .flower-right .p1{left:62px;top:32px}.flower-right .p2{left:116px;top:70px}
+  .flower-right .p3{left:28px;top:110px}.flower-right .p4{left:112px;top:145px}.flower-right .p5{left:48px;top:180px}
+  @keyframes flowerSway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(2deg)}}
+  @keyframes petalFloat{0%,100%{margin-top:0}50%{margin-top:-7px}}
+  .flower-right{animation-name:flowerSwayR}
+  @keyframes flowerSwayR{0%,100%{transform:scaleX(-1) rotate(-1.5deg)}50%{transform:scaleX(-1) rotate(2deg)}}
+  @media(max-width:680px){
+    .hero-flower{width:135px;height:230px;opacity:.72}
+    .flower-left{left:-35px}.flower-right{right:-35px}
+    .hero-flower .stem{left:60px;height:210px}
+    .hero-flower .petal{width:34px;height:50px}
+    .flower-left .p1{left:45px;top:35px}.flower-left .p2{left:75px;top:62px}
+    .flower-left .p3{left:22px;top:90px}.flower-left .p4{left:75px;top:120px}.flower-left .p5{left:40px;top:145px}
+    .flower-right .p1{left:45px;top:35px}.flower-right .p2{left:75px;top:62px}
+    .flower-right .p3{left:22px;top:90px}.flower-right .p4{left:75px;top:120px}.flower-right .p5{left:40px;top:145px}
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 50% 18%, rgba(234,215,209,.95) 0%, rgba(255,250,244,.9) 48%, var(--white) 78%);
+    text-align:center;
+    overflow:hidden;
+    padding:100px 24px 60px;
+  }
+  .hero-frame{
+    position:relative;
+    z-index:2;
+    width:min(820px,100%);
+    padding:54px 34px 48px;
+    border:1px solid rgba(177,138,74,.48);
+    background:rgba(255,250,244,.64);
+    box-shadow:0 18px 55px rgba(77,46,48,.08);
+    animation:fadeUp 1.4s ease both;
+  }
+  .hero-frame::before,
+  .hero-frame::after{
+    content:"";
+    position:absolute;
+    inset:12px;
+    pointer-events:none;
+    border:1px solid rgba(177,138,74,.28);
+    border-radius:2px;
+  }
+  .hero-frame::after{
+    inset:0;
+    border:0;
+    background:
+      radial-gradient(circle at 0 0, transparent 0 11px, rgba(177,138,74,.28) 12px 13px, transparent 14px) 0 0/26px 26px,
+      radial-gradient(circle at 100% 0, transparent 0 11px, rgba(177,138,74,.28) 12px 13px, transparent 14px) 100% 0/26px 26px,
+      radial-gradient(circle at 0 100%, transparent 0 11px, rgba(177,138,74,.28) 12px 13px, transparent 14px) 0 100%/26px 26px,
+      radial-gradient(circle at 100% 100%, transparent 0 11px, rgba(177,138,74,.28) 12px 13px, transparent 14px) 100% 100%/26px 26px;
+    background-repeat:no-repeat;
+  }
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(18px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .bismillah{font-size:32px;color:var(--burgundy);margin-bottom:22px;letter-spacing:.2px;}
+  .invitation-lead{max-width:650px;margin:0 auto 30px;font-size:14px;line-height:1.9;letter-spacing:2.3px;color:var(--ink);font-weight:600;}
+
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:4px;
+    font-size:13px;
+    color:var(--rose-deep);
+    margin-bottom:14px;
+  }
+  .names{
+    font-family:'Royal Signage Regular','Royal Signage',serif;
+    font-weight:400;
+    font-size:clamp(58px, 11vw, 118px);
+    line-height:1.15;
+    color:var(--burgundy);
+    text-shadow:0 1px 0 rgba(255,255,255,0.7);
+  }
+  .amp{
+    display:block;
+    font-size:clamp(24px, 4vw, 34px);
+    color:var(--gold);
+    margin:2px 0;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+  }
+  .hero-date{
+    margin-top:22px;
+    font-size:23px;
+    letter-spacing:2px;
+    color:var(--burgundy);
+    font-weight:600;
+  }
+
+  .countdown{
+    margin-top:40px;
+    display:flex;
+    gap:26px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .countdown div{ min-width:76px; }
+  .countdown .num{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:32px;
+    color:var(--rose-deep);
+    display:block;
+  }
+  .countdown .lbl{
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:26px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:2;
+    font-size:12px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    margin:0 auto;
+    max-width:340px;
+    padding:56px 0 30px;
+  }
+  .divider .rule{flex:1; height:1px; background:var(--line);}
+  .divider .mark{ color:var(--gold); font-size:20px; }
+
+  section{padding:20px 0 84px;}
+  .section-title{
+    text-align:center;
+    font-size:clamp(30px,5vw,42px);
+    color:var(--rose-deep);
+    margin-bottom:8px;
+  }
+  .section-sub{
+    text-align:center;
+    font-style:italic;
+    color:var(--ink-soft);
+    margin-bottom:52px;
+    font-size:18px;
+  }
+
+  /* ===== DETAILS CARDS ===== */
+  .cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+  }
+  @media (max-width:680px){
+    .cards{grid-template-columns:1fr;}
+    .hero-frame{padding:40px 18px 34px;}
+    .bismillah{font-size:26px;}
+    .invitation-lead{font-size:12px;letter-spacing:1.6px;}
+    .names{font-size:clamp(54px,17vw,92px);}
+  }
+  .card{
+    position:relative;
+    background:linear-gradient(145deg,#f2ddd7 0%,#dfb8b5 100%);
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:44px 32px;
+    text-align:center;
+  }
+  .card::before,.card::after{
+    content:"❦";
+    position:absolute;
+    color:var(--gold);
+    font-size:16px;
+  }
+  .card::before{top:12px;left:14px;}
+  .card::after{bottom:12px;right:14px;}
+  .card h3{
+    color:var(--rose-deep);
+    font-size:24px;
+    margin-bottom:14px;
+    letter-spacing:1px;
+  }
+  .card .time{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:34px;
+    color:var(--ink);
+    display:block;
+    margin-bottom:6px;
+  }
+  .card p{margin:4px 0; color:var(--ink-soft);}
+
+  /* ===== RULES / ETIQUETTE ===== */
+
+  .rules-box{
+    max-width:640px;
+    margin:0 auto;
+    text-align:center;
+    background:rgba(255,250,244,.88);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:48px 40px;
+    box-shadow:var(--shadow);
+  }
+  .rules-box .flourish{ font-size:26px; color:var(--gold); margin-bottom:18px; }
+  .rules-box p{
+    font-size:20px;
+    color:var(--ink);
+    margin:14px 0;
+  }
+  .rules-box .highlight{
+    display:inline-block;
+    margin-top:10px;
+    padding:10px 26px;
+    border:1px solid var(--rose);
+    border-radius:30px;
+    color:var(--rose-deep);
+    font-size:17px;
+    letter-spacing:0.5px;
+  }
+
+  /* ===== DUA ===== */
+  .dua{
+    background: linear-gradient(180deg, var(--blush) 0%, var(--blush-soft) 100%);
+    color:var(--ink);
+    text-align:center;
+    padding:80px 24px;
+    position:relative;
+  }
+  .dua .arabic-line{
+    font-family:'Aref Ruqaa', serif;
+    font-size:30px;
+    color:var(--rose-deep);
+    margin-bottom:22px;
+  }
+  .dua p{
+    max-width:600px;
+    margin:0 auto;
+    font-style:italic;
+    font-size:21px;
+    color:var(--ink);
+    line-height:1.8;
+  }
+
+  /* ===== LOCATION ===== */
+  .map-wrap{
+    border:1px solid rgba(177,138,74,.45);
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .map-wrap iframe{width:100%; height:360px; border:0; display:block;}
+  .addr{
+    text-align:center;
+    margin-top:22px;
+    font-size:18px;
+    color:var(--ink-soft);
+  }
+  .addr strong{color:var(--rose-deep);}
+
+  /* ===== RSVP FORM ===== */
+  form.rsvp-form{
+    max-width:560px;
+    margin:0 auto;
+    background:var(--white);
+    border:1px solid var(--line);
+    padding:48px 40px;
+    box-shadow:var(--shadow);
+    border-radius:6px;
+  }
+  .field{margin-bottom:26px;}
+  .field label{
+    display:block;
+    font-size:14px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--rose-deep);
+    margin-bottom:8px;
+  }
+  .field input[type="text"],
+  .field input[type="number"],
+  .field textarea,
+  .field select{
+    width:100%;
+    padding:12px 14px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:18px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:6px;
+    color:var(--ink);
+  }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus{
+    outline:2px solid var(--gold);
+    outline-offset:1px;
+  }
+  .radio-group{ display:flex; gap:18px; flex-wrap:wrap; }
+  .radio-group label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    text-transform:none;
+    letter-spacing:0;
+    font-size:18px;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .radio-group input{ accent-color:var(--rose-deep); width:18px; height:18px; }
+  .submit-btn{
+    width:100%;
+    padding:16px;
+    background:var(--rose-deep);
+    color:var(--white);
+    border:none;
+    border-radius:30px;
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:18px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background 0.25s ease;
+  }
+  .submit-btn:hover{ background:var(--gold); }
+  .submit-btn:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+  .form-note{ text-align:center; font-size:14px; color:var(--ink-soft); margin-top:16px; }
+  .form-status{ text-align:center; margin-top:18px; font-size:16px; display:none; }
+  .form-status.ok{ color:var(--rose-deep); display:block; }
+  .form-status.err{ color:#a55; display:block; }
+
+  /* ===== MUSIC TOGGLE ===== */
+  #youtubeMusic{
+    position:fixed;
+    width:1px;
+    height:1px;
+    left:-10px;
+    bottom:-10px;
+    overflow:hidden;
+    opacity:0;
+    pointer-events:none;
+  }
+  #youtubeMusic iframe{
+    width:1px;
+    height:1px;
+    border:0;
+  }
+
+  .music-btn{
+    position:fixed;
+    bottom:24px;
+    right:24px;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:var(--rose-deep);
+    color:#fff;
+    border:none;
+    font-size:20px;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(201,124,138,0.4);
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform 0.2s ease;
+  }
+  .music-btn:hover{ transform:scale(1.08); }
+  .music-btn.playing{ animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 8px 24px rgba(201,124,138,0.4); }
+    50%{ box-shadow:0 8px 34px rgba(201,124,138,0.7); }
+  }
+
+  /* ===== FOOTER ===== */
+  footer{
+    text-align:center;
+    padding:56px 24px 40px;
+    color:var(--ink-soft);
+    font-size:15px;
+    letter-spacing:1px;
+    background:var(--blush);
+  }
+  footer .script{ font-family:'Royal Signage Regular','Royal Signage',serif; color:var(--burgundy); font-size:34px; display:block; margin-bottom:10px; }
+
+
+  /* Delicate lace-like edging without images */
+  section:not(.hero)::before{
+    content:"";
+    display:block;
+    width:min(520px,78%);
+    height:12px;
+    margin:-8px auto 28px;
+    opacity:.55;
+    background:
+      radial-gradient(circle at 6px 6px, transparent 0 4px, var(--gold) 4.5px 5.5px, transparent 6px) 0 0/24px 12px repeat-x;
+    border-top:1px solid rgba(177,138,74,.32);
+  }
+  .section-title{color:var(--burgundy);text-shadow:0 2px 0 rgba(255,255,255,.5);}
+  .section-sub{color:var(--ink-soft);}
+
+  @media (prefers-reduced-motion: reduce){
+    .floral.sway, .floral.swayR, .petal, .hero-frame, .music-btn.playing{ animation:none; }
+  }
+</style>
+</head>
+<body class="envelope-locked>
+
+  <!-- ===== LACE ENVELOPE OPENING ===== -->
+  <div class="envelope-screen" id="envelopeScreen">
+    <div class="envelope-wrap" id="envelopeWrap">
+      <div class="envelope-lace">
+        <div class="lace-corner lace-tl">❦</div>
+        <div class="lace-corner lace-tr">❦</div>
+        <div class="lace-corner lace-bl">❦</div>
+        <div class="lace-corner lace-br">❦</div>
+        <div class="envelope">
+          <div class="envelope-flap"></div>
+          <div class="envelope-paper">
+            <div class="paper-arabic arabic" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+            <div class="paper-names">Ильшат <span>и</span> Дильназ</div>
+          </div>
+          <button class="seal" id="openEnvelope" aria-label="Открыть приглашение"><span>❦</span></button>
+        </div>
+      </div>
+      <p class="envelope-hint">Нажмите на печать, чтобы открыть приглашение</p>
+    </div>
+  </div>
+
+
+<!-- ===== HERO ===== -->
+<div class="invitation-page" id="invitationPage">
+<section class="hero">
+
+  <!-- Large animated floral branches -->
+  <div class="hero-flower flower-left" aria-hidden="true">
+    <span class="stem"></span><i class="petal p1"></i><i class="petal p2"></i><i class="petal p3"></i><i class="petal p4"></i><i class="petal p5"></i>
+  </div>
+  <div class="hero-flower flower-right" aria-hidden="true">
+    <span class="stem"></span><i class="petal p1"></i><i class="petal p2"></i><i class="petal p3"></i><i class="petal p4"></i><i class="petal p5"></i>
+  </div>
+
+  <!-- floral corners -->
+  <svg class="floral sway" style="top:8px; left:8px;" width="150" height="150" viewBox="0 0 150 150" fill="none">
+    <g stroke="#c9a24a" stroke-width="1.4">
+      <path d="M10 140 C 20 100, 40 70, 70 40" />
+      <path d="M30 110 C 45 100, 55 90, 60 75" stroke="#e2a3ab"/>
+      <path d="M45 80 C 60 75, 70 65, 78 50" stroke="#e2a3ab"/>
+    </g>
+    <g fill="#e2a3ab" opacity="0.85">
+      <circle cx="70" cy="40" r="7"/><circle cx="80" cy="32" r="6"/><circle cx="60" cy="30" r="6"/>
+      <circle cx="70" cy="24" r="6"/><circle cx="78" cy="46" r="5"/>
+    </g>
+    <circle cx="70" cy="36" r="4" fill="#c9a24a"/>
+    <g fill="#f7ddd8">
+      <circle cx="48" cy="82" r="4.5"/><circle cx="58" cy="78" r="4"/>
+    </g>
+  </svg>
+
+  <svg class="floral swayR" style="top:8px; right:8px;" width="150" height="150" viewBox="0 0 150 150" fill="none">
+    <g stroke="#c9a24a" stroke-width="1.4">
+      <path d="M10 140 C 20 100, 40 70, 70 40" />
+      <path d="M30 110 C 45 100, 55 90, 60 75" stroke="#e2a3ab"/>
+      <path d="M45 80 C 60 75, 70 65, 78 50" stroke="#e2a3ab"/>
+    </g>
+    <g fill="#e2a3ab" opacity="0.85">
+      <circle cx="70" cy="40" r="7"/><circle cx="80" cy="32" r="6"/><circle cx="60" cy="30" r="6"/>
+      <circle cx="70" cy="24" r="6"/><circle cx="78" cy="46" r="5"/>
+    </g>
+    <circle cx="70" cy="36" r="4" fill="#c9a24a"/>
+    <g fill="#f7ddd8">
+      <circle cx="48" cy="82" r="4.5"/><circle cx="58" cy="78" r="4"/>
+    </g>
+  </svg>
+
+  <!-- falling petals -->
+  <div class="petal" style="left:12%; animation-delay:0s;"></div>
+  <div class="petal" style="left:28%; animation-delay:2s;"></div>
+  <div class="petal" style="left:47%; animation-delay:4.5s;"></div>
+  <div class="petal" style="left:66%; animation-delay:1.2s;"></div>
+  <div class="petal" style="left:83%; animation-delay:3.3s;"></div>
+
+  <div class="hero-frame">
+    <div class="bismillah arabic" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+    <p class="invitation-lead">С БЛАГОСЛОВЕНИЯ АЛЛАХА<br>МЫ РАДЫ ПРИГЛАСИТЬ ВАС<br>ОТПРАЗДНОВАТЬ ЭТО ОСОБОЕ СОБЫТИЕ ВМЕСТЕ С НАМИ</p>
+
+    <h1 class="names">Ильшат<span class="amp">и</span>Дильназ</h1>
+    <div class="hero-date">26 августа 2026</div>
+
+    <div class="countdown" id="countdown">
+      <div><span class="num" id="cd-days">00</span><span class="lbl">дней</span></div>
+      <div><span class="num" id="cd-hours">00</span><span class="lbl">часов</span></div>
+      <div><span class="num" id="cd-min">00</span><span class="lbl">минут</span></div>
+      <div><span class="num" id="cd-sec">00</span><span class="lbl">секунд</span></div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Листайте вниз ↓</div>
+</section>
+
+<!-- ===== DETAILS ===== -->
+<section id="details">
+  <div class="container">
+    <div class="divider"><div class="rule"></div><div class="mark">❀</div><div class="rule"></div></div>
+    <h2 class="section-title">Дорогие гости</h2>
+    <p class="section-sub">Ждём вас разделить с нами этот особенный день</p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Мужчины</h3>
+        <span class="time">11:00</span>
+        <p>Ждём вас в назначенное время</p>
+      </div>
+      <div class="card">
+        <h3>Женщины</h3>
+        <span class="time">15:00</span>
+        <p>Ждём вас в назначенное время</p>
+      </div>
+    </div>
+    <div class="children-card">
+      <p>Дорогие гости, мы очень хотим, чтобы в этот особенный день вы смогли отдохнуть, расслабиться и сполна насладиться праздником вместе с нами.</p>
+      <p>Поэтому будем благодарны, если в этот вечер вы придёте <strong>без детей</strong> и подарите себе возможность провести этот день в спокойной и праздничной атмосфере.</p>
+    </div>
+</div>
+</section>
+
+<!-- ===== DUA REMOVED ===== -->
+
+
+<!-- ===== LOCATION ===== -->
+<section id="location">
+  <div class="container">
+    <div class="divider"><div class="rule"></div><div class="mark">❀</div><div class="rule"></div></div>
+    <h2 class="section-title">Как добраться</h2>
+    <p class="section-sub">Адрес и маршрут</p>
+    <div class="map-wrap">
+      <iframe
+        src="https://www.google.com/maps?q=Restaurant+Batyr+Almaty&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Карта проезда"></iframe>
+    </div>
+    <p class="addr">На территории есть <strong>бесплатная парковка</strong>.</p>
+  </div>
+</section>
+
+<!-- ===== RSVP ===== -->
+<section class="rsvp" id="rsvp">
+  <div class="container">
+    <div class="divider"><div class="rule"></div><div class="mark">❀</div><div class="rule"></div></div>
+    <h2 class="section-title">Подтвердите присутствие</h2>
+    <p class="section-sub">Пожалуйста, подтвердите своё присутствие</p>
+
+    <form class="rsvp-form" id="rsvpForm" action="https://script.google.com/macros/s/AKfycbw8xIYkVFZygFVsve_1DyNMtuINsLhQMsgQRbCybmGkcK5J4P9OeFosa26uhhnDaVQ7AQ/exec" method="POST">
+      <div class="field">
+        <label for="name">Ваше имя и фамилия</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="field">
+        <label>Сможете присутствовать?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="attendance" value="Да, буду" required> Да, буду</label>
+          <label><input type="radio" name="attendance" value="Нет, не смогу"> Нет, не смогу</label>
+          <label><input type="radio" name="attendance" value="Пока не знаю"> Пока не знаю</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="event">Вы придёте на</label>
+        <select id="event" name="event">
+          <option value="Мужская часть, 11:00">Мужская часть, 11:00</option>
+          <option value="Женская часть, 15:00">Женская часть, 15:00</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Отправить ответ</button>
+      <p class="form-note">Спасибо, что ответили на приглашение ♥</p>
+      <p class="form-status" id="formStatus"></p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span class="script">С любовью, Ильшат и Дильназ</span>
+  Будем рады видеть вас в этот особенный день ♥
+</footer>
+
+<!-- Background music from YouTube.
+     Browsers generally block autoplay with sound until the visitor interacts
+     with the page, so the first tap/click starts the music. -->
+<div id="youtubeMusic" aria-hidden="true">
+  <iframe
+    id="youtubePlayer"
+    src="https://www.youtube.com/embed/ivrumxRUz_Y?enablejsapi=1&autoplay=0&loop=1&playlist=ivrumxRUz_Y&controls=0&playsinline=1"
+    title="Wedding music"
+    allow="autoplay; encrypted-media"
+    frameborder="0"></iframe>
+</div>
+<button class="music-btn" id="musicBtn" aria-label="Включить музыку" title="Включить музыку">♪</button>
+
+<script>
+
+  // Page 1: envelope. Page 2: invitation.
+  const envelopeScreen = document.getElementById('envelopeScreen');
+  const envelopeWrap = document.getElementById('envelopeWrap');
+  const openEnvelope = document.getElementById('openEnvelope');
+  const invitationPage = document.getElementById('invitationPage');
+
+  if (openEnvelope) {
+    openEnvelope.addEventListener('click', () => {
+      envelopeWrap.classList.add('opening');
+
+      setTimeout(() => {
+        envelopeScreen.classList.add('is-open');
+
+        setTimeout(() => {
+          invitationPage.classList.add('visible');
+          document.body.classList.remove('envelope-locked');
+          document.body.classList.add('invitation-open');
+          window.scrollTo(0, 0);
+        }, 300);
+      }, 900);
+    });
+  }
+
+
+  // Countdown to 26 August 2026, 11:00 (Almaty time)
+  const target = new Date("2026-08-26T11:00:00+05:00").getTime();
+  function tick(){
+    const now = Date.now();
+    const diff = Math.max(0, target - now);
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-sec').textContent = String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // Music toggle via YouTube IFrame API.
+  const musicBtn = document.getElementById('musicBtn');
+  let ytPlayer = null;
+  let ytReady = false;
+  let playing = false;
+
+  function onYouTubeIframeAPIReady(){
+    ytPlayer = new YT.Player('youtubePlayer', {
+      events: {
+        onReady: () => {
+          ytReady = true;
+        }
+      }
+    });
+  }
+
+  musicBtn.addEventListener('click', () => {
+    if (!ytReady || !ytPlayer) return;
+
+    if (!playing) {
+      ytPlayer.playVideo();
+      musicBtn.textContent = '❚❚';
+      musicBtn.classList.add('playing');
+      musicBtn.setAttribute('aria-label', 'Выключить музыку');
+      musicBtn.title = 'Выключить музыку';
+      playing = true;
+    } else {
+      ytPlayer.pauseVideo();
+      musicBtn.textContent = '♪';
+      musicBtn.classList.remove('playing');
+      musicBtn.setAttribute('aria-label', 'Включить музыку');
+      musicBtn.title = 'Включить музыку';
+      playing = false;
+    }
+  });
+
+  // Start music on the visitor's first interaction with the invitation.
+  // This is the most reliable way to satisfy browser autoplay policies.
+  document.addEventListener('click', (event) => {
+    if (event.target.closest('#musicBtn')) return;
+    if (!playing && ytReady && ytPlayer) {
+      ytPlayer.playVideo();
+      musicBtn.textContent = '❚❚';
+      musicBtn.classList.add('playing');
+      musicBtn.setAttribute('aria-label', 'Выключить музыку');
+      musicBtn.title = 'Выключить музыку';
+      playing = true;
+    }
+  }, { once: true });
+
+  // Load YouTube's player API.
+  const ytScript = document.createElement('script');
+  ytScript.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(ytScript);
+
+  // RSVP submit via fetch so we can show inline confirmation
+  const form = document.getElementById('rsvpForm');
+  const status = document.getElementById('formStatus');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const btn = form.querySelector('.submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Отправляем...';
+    status.textContent = '';
+
+    try {
+      // Google Apps Script redirects its POST response. With no-cors the
+      // response is intentionally opaque, so checking res.ok would always
+      // be unreliable. We only treat an actual network error as failure.
+      const data = new URLSearchParams();
+      data.append('name', form.elements['name'].value);
+      data.append('attendance', form.elements['attendance'].value);
+      data.append('event', form.elements['event'].value);
+
+      await fetch(form.action, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: data.toString(),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        }
+      });
+
+      status.textContent = 'Спасибо! Ваш ответ получен.';
+      status.className = 'form-status ok';
+      form.reset();
+
+    } catch (err) {
+      console.error('RSVP error:', err);
+      status.textContent = 'Не удалось отправить. Проверьте интернет и попробуйте ещё раз.';
+      status.className = 'form-status err';
+
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Отправить ответ';
+    }
+  });
+</script>
+
+
+</div>
+
+</body>
+</html>
