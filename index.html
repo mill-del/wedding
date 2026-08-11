@@ -565,22 +565,6 @@
   .form-status.err{ color:#a55; display:block; }
 
   /* ===== MUSIC TOGGLE ===== */
-  #youtubeMusic{
-    position:fixed;
-    width:1px;
-    height:1px;
-    left:-10px;
-    bottom:-10px;
-    overflow:hidden;
-    opacity:0;
-    pointer-events:none;
-  }
-  #youtubeMusic iframe{
-    width:1px;
-    height:1px;
-    border:0;
-  }
-
   .music-btn{
     position:fixed;
     bottom:24px;
@@ -639,7 +623,7 @@
   }
 </style>
 </head>
-<body class="envelope-locked>
+<body class="envelope-locked">
 
   <!-- ===== LACE ENVELOPE OPENING ===== -->
   <div class="envelope-screen" id="envelopeScreen">
@@ -821,17 +805,9 @@
   <span class="script">Ришат и Манзура</span>
 </footer>
 
-<!-- Background music from YouTube.
-     Browsers generally block autoplay with sound until the visitor interacts
-     with the page, so the first tap/click starts the music. -->
-<div id="youtubeMusic" aria-hidden="true">
-  <iframe
-    id="youtubePlayer"
-    src="https://www.youtube.com/embed/ivrumxRUz_Y?enablejsapi=1&autoplay=0&loop=1&playlist=ivrumxRUz_Y&controls=0&playsinline=1"
-    title="Wedding music"
-    allow="autoplay; encrypted-media"
-    frameborder="0"></iframe>
-</div>
+<audio id="weddingMusic" preload="auto" loop>
+  <source src="wedding-music.mp3" type="audio/mpeg">
+</audio>
 <button class="music-btn" id="musicBtn" aria-label="Включить музыку" title="Включить музыку">♪</button>
 
 <script>
@@ -840,14 +816,42 @@
   const envelopeScreen = document.getElementById('envelopeScreen');
   const envelopeWrap = document.getElementById('envelopeWrap');
   const openEnvelope = document.getElementById('openEnvelope');
+  const weddingMusic = document.getElementById('weddingMusic');
   const invitationPage = document.getElementById('invitationPage');
+  const musicBtn = document.getElementById('musicBtn');
+  let playing = false;
+
+  function startMusic(){
+    if (!weddingMusic || playing) return;
+    weddingMusic.volume = 0.8;
+    weddingMusic.play().then(() => {
+      playing = true;
+      musicBtn.textContent = '❚❚';
+      musicBtn.classList.add('playing');
+      musicBtn.setAttribute('aria-label', 'Выключить музыку');
+      musicBtn.title = 'Выключить музыку';
+    }).catch((err) => {
+      // Autoplay can still be blocked on some browsers even after a tap;
+      // the visible music button lets the guest start it manually.
+      console.warn('Не удалось запустить музыку автоматически:', err);
+    });
+  }
+
+  function stopMusic(){
+    if (!weddingMusic) return;
+    weddingMusic.pause();
+    playing = false;
+    musicBtn.textContent = '♪';
+    musicBtn.classList.remove('playing');
+    musicBtn.setAttribute('aria-label', 'Включить музыку');
+    musicBtn.title = 'Включить музыку';
+  }
 
   if (openEnvelope) {
     openEnvelope.addEventListener('click', () => {
       // The envelope click is a real user gesture, so use it to start
-      // YouTube playback. This is much more reliable than waiting for a
-      // later timeout or another click.
-      if (ytReady && ytPlayer && !playing) startMusic();
+      // the mp3 — this is the moment browsers allow audio with sound.
+      startMusic();
 
       envelopeWrap.classList.add('opening');
 
@@ -863,6 +867,11 @@
       }, 900);
     });
   }
+
+  musicBtn.addEventListener('click', () => {
+    if (!playing) startMusic();
+    else stopMusic();
+  });
 
 
   // Countdown to 26 August 2026, 11:00 (Almaty time)
@@ -881,63 +890,6 @@
   }
   tick();
   setInterval(tick, 1000);
-
-  // Music toggle via YouTube IFrame API.
-  const musicBtn = document.getElementById('musicBtn');
-  let ytPlayer = null;
-  let ytReady = false;
-  let playing = false;
-
-  function onYouTubeIframeAPIReady(){
-    ytPlayer = new YT.Player('youtubePlayer', {
-      events: {
-        onReady: () => {
-          ytReady = true;
-          tryStartAfterYouTubeReady();
-        }
-      }
-    });
-  }
-
-  function startMusic(){
-    if (!ytReady || !ytPlayer || playing) return;
-    ytPlayer.playVideo();
-    musicBtn.textContent = '❚❚';
-    musicBtn.classList.add('playing');
-    musicBtn.setAttribute('aria-label', 'Выключить музыку');
-    musicBtn.title = 'Выключить музыку';
-    playing = true;
-  }
-
-  function stopMusic(){
-    if (!ytReady || !ytPlayer) return;
-    ytPlayer.pauseVideo();
-    musicBtn.textContent = '♪';
-    musicBtn.classList.remove('playing');
-    musicBtn.setAttribute('aria-label', 'Включить музыку');
-    musicBtn.title = 'Включить музыку';
-    playing = false;
-  }
-
-  musicBtn.addEventListener('click', () => {
-    if (!ytReady || !ytPlayer) return;
-    if (!playing) startMusic();
-    else stopMusic();
-  });
-
-  // If YouTube becomes ready after the envelope was already opened,
-  // start playback as soon as possible.
-  function tryStartAfterYouTubeReady(){
-    if (document.body.classList.contains('invitation-open') && !playing) {
-      startMusic();
-    }
-  }
-
-
-  // Load YouTube's player API.
-  const ytScript = document.createElement('script');
-  ytScript.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(ytScript);
 
   // RSVP submit via fetch so we can show inline confirmation
   const form = document.getElementById('rsvpForm');
