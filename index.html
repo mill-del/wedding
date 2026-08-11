@@ -817,8 +817,8 @@
 </section>
 
 <footer>
-  <span class="script">С любовью, Ильшат и Дильназ</span>
-  Будем рады видеть вас в этот особенный день ♥
+  <span class="script">С уважением, Родители жениха</span>
+  <span class="script">Ришат и Манзура</span>
 </footer>
 
 <!-- Background music from YouTube.
@@ -844,6 +844,11 @@
 
   if (openEnvelope) {
     openEnvelope.addEventListener('click', () => {
+      // The envelope click is a real user gesture, so use it to start
+      // YouTube playback. This is much more reliable than waiting for a
+      // later timeout or another click.
+      if (ytReady && ytPlayer && !playing) startMusic();
+
       envelopeWrap.classList.add('opening');
 
       setTimeout(() => {
@@ -888,44 +893,46 @@
       events: {
         onReady: () => {
           ytReady = true;
+          tryStartAfterYouTubeReady();
         }
       }
     });
   }
 
+  function startMusic(){
+    if (!ytReady || !ytPlayer || playing) return;
+    ytPlayer.playVideo();
+    musicBtn.textContent = '❚❚';
+    musicBtn.classList.add('playing');
+    musicBtn.setAttribute('aria-label', 'Выключить музыку');
+    musicBtn.title = 'Выключить музыку';
+    playing = true;
+  }
+
+  function stopMusic(){
+    if (!ytReady || !ytPlayer) return;
+    ytPlayer.pauseVideo();
+    musicBtn.textContent = '♪';
+    musicBtn.classList.remove('playing');
+    musicBtn.setAttribute('aria-label', 'Включить музыку');
+    musicBtn.title = 'Включить музыку';
+    playing = false;
+  }
+
   musicBtn.addEventListener('click', () => {
     if (!ytReady || !ytPlayer) return;
-
-    if (!playing) {
-      ytPlayer.playVideo();
-      musicBtn.textContent = '❚❚';
-      musicBtn.classList.add('playing');
-      musicBtn.setAttribute('aria-label', 'Выключить музыку');
-      musicBtn.title = 'Выключить музыку';
-      playing = true;
-    } else {
-      ytPlayer.pauseVideo();
-      musicBtn.textContent = '♪';
-      musicBtn.classList.remove('playing');
-      musicBtn.setAttribute('aria-label', 'Включить музыку');
-      musicBtn.title = 'Включить музыку';
-      playing = false;
-    }
+    if (!playing) startMusic();
+    else stopMusic();
   });
 
-  // Start music on the visitor's first interaction with the invitation.
-  // This is the most reliable way to satisfy browser autoplay policies.
-  document.addEventListener('click', (event) => {
-    if (event.target.closest('#musicBtn')) return;
-    if (!playing && ytReady && ytPlayer) {
-      ytPlayer.playVideo();
-      musicBtn.textContent = '❚❚';
-      musicBtn.classList.add('playing');
-      musicBtn.setAttribute('aria-label', 'Выключить музыку');
-      musicBtn.title = 'Выключить музыку';
-      playing = true;
+  // If YouTube becomes ready after the envelope was already opened,
+  // start playback as soon as possible.
+  function tryStartAfterYouTubeReady(){
+    if (document.body.classList.contains('invitation-open') && !playing) {
+      startMusic();
     }
-  }, { once: true });
+  }
+
 
   // Load YouTube's player API.
   const ytScript = document.createElement('script');
